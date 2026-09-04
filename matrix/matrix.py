@@ -53,7 +53,25 @@ from .arithmetic import (
     multiply,
     divide,
     negate,
-    power
+    power,
+    elementwise_multiply,
+    apply,
+    exp,
+    log,
+    sqrt,
+    abs,
+    sin,
+    cos,
+    tan,
+    sinh,
+    cosh,
+    tanh,
+    sum,
+    mean,
+    min,
+    max,
+    prod, 
+    norm
 )
 
 class Matrix:
@@ -92,6 +110,63 @@ class Matrix:
     def __mul__(self, other):
         return multiply(self, other)
 
+    def elementwise_multiply(self, other):
+        return elementwise_multiply(self, other)
+
+    def apply(self, function):
+        return apply(self, function)
+
+    def exp(self):
+        return exp(self)
+
+    def log(self):
+        return log(self)
+
+    def sqrt(self):
+        return sqrt(self)
+
+    def abs(self):
+        return abs(self)
+
+    def sin(self):
+        return sin(self)
+
+    def cos(self):
+        return cos(self)
+
+    def tan(self):
+        return tan(self)
+
+    def sinh(self):
+        return sinh(self)
+
+    def cosh(self):
+        return cosh(self)
+
+    def tanh(self):
+        return tanh(self)
+
+    def sum(self):
+        return sum(self)
+
+    def mean(self):
+        return mean(self)
+
+    def min(self):
+        return min(self)
+
+
+    def max(self):
+        return max(self)
+
+
+    def prod(self):
+        return prod(self)
+
+
+    def norm(self):
+        return norm(self)
+    
     def __truediv__(self, other):
         return divide(self, other)
 

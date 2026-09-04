@@ -1,4 +1,5 @@
 import unittest
+import math
 from matrix import Matrix
 from matrix.validators import (
     check_matrix,
@@ -325,6 +326,340 @@ class TestMatrix(unittest.TestCase):
             Matrix([
                 [3, 6],
                 [9, 12]
+            ])
+        )
+
+    def test_elementwise_multiply(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        B = Matrix([
+            [5, 6],
+            [7, 8]
+        ])
+
+        self.assertEqual(
+            A.elementwise_multiply(B),
+            Matrix([
+                [5, 12],
+                [21, 32]
+            ])
+        )
+
+        with self.assertRaises(ValueError):
+            A.elementwise_multiply(
+                Matrix([
+                    [1, 2, 3],
+                    [4, 5, 6]
+                ])
+            )
+
+        self.assertEqual(
+            A * B,
+            Matrix([
+                [19, 22],
+                [43, 50]
+            ])
+        )
+
+
+    def test_apply(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        result = A.apply(lambda x: x * 2)
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [2, 4],
+                [6, 8]
+            ])
+        )
+
+
+    def test_apply_builtin(self):
+        A = Matrix([
+            [-1, 2],
+            [-3, 4]
+        ])
+
+        result = A.apply(abs)
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [1, 2],
+                [3, 4]
+            ])
+        )
+
+
+    def test_exp(self):
+        A = Matrix([
+            [0, 1],
+            [2, 0]
+        ])
+
+        result = A.exp()
+
+        self.assertEqual(result[0, 0], 1)
+        self.assertEqual(result[1, 1], 1)
+
+        self.assertAlmostEqual(result[0, 1], 2.718281828459045)
+        self.assertAlmostEqual(result[1, 0], 7.38905609893065)
+
+
+    def test_log(self):
+        A = Matrix([
+            [1, math.e],
+            [math.e ** 2, 10]
+        ])
+
+        result = A.log()
+
+        self.assertAlmostEqual(result[0, 0], 0)
+        self.assertAlmostEqual(result[0, 1], 1)
+        self.assertAlmostEqual(result[1, 0], 2)
+        self.assertAlmostEqual(result[1, 1], math.log(10))
+
+    def test_sqrt(self):
+        A = Matrix([
+            [1, 4],
+            [9, 16]
+        ])
+
+        result = A.sqrt()
+
+        self.assertEqual(result[0, 0], 1)
+        self.assertEqual(result[0, 1], 2)
+        self.assertEqual(result[1, 0], 3)
+        self.assertEqual(result[1, 1], 4)
+
+    def test_abs(self):
+        A = Matrix([
+            [-1, 2],
+            [-3, -4]
+        ])
+
+        result = A.abs()
+
+        self.assertEqual(result[0, 0], 1)
+        self.assertEqual(result[0, 1], 2)
+        self.assertEqual(result[1, 0], 3)
+        self.assertEqual(result[1, 1], 4)
+
+    def test_sin(self):
+        A = Matrix([
+            [0, math.pi / 2],
+            [math.pi, 3 * math.pi / 2]
+        ])
+
+        result = A.sin()
+
+        self.assertAlmostEqual(result[0, 0], 0)
+        self.assertAlmostEqual(result[0, 1], 1)
+        self.assertAlmostEqual(result[1, 0], 0)
+        self.assertAlmostEqual(result[1, 1], -1)
+
+    def test_cos(self):
+        A = Matrix([
+            [0, math.pi / 2],
+            [math.pi, 2 * math.pi]
+        ])
+
+        result = A.cos()
+
+        self.assertAlmostEqual(result[0, 0], 1)
+        self.assertAlmostEqual(result[0, 1], 0)
+        self.assertAlmostEqual(result[1, 0], -1)
+        self.assertAlmostEqual(result[1, 1], 1)
+
+    def test_tan(self):
+        A = Matrix([
+            [0, math.pi / 4],
+            [-math.pi / 4, math.pi]
+        ])
+
+        result = A.tan()
+
+        self.assertAlmostEqual(result[0, 0], 0)
+        self.assertAlmostEqual(result[0, 1], 1)
+        self.assertAlmostEqual(result[1, 0], -1)
+        self.assertAlmostEqual(result[1, 1], 0)
+
+    def test_sinh(self):
+        A = Matrix([
+            [0, 1],
+            [-1, 2]
+        ])
+
+        result = A.sinh()
+
+        self.assertAlmostEqual(result[0, 0], 0)
+        self.assertAlmostEqual(result[0, 1], math.sinh(1))
+        self.assertAlmostEqual(result[1, 0], math.sinh(-1))
+        self.assertAlmostEqual(result[1, 1], math.sinh(2))
+
+    def test_cosh(self):
+        A = Matrix([
+            [0, 1],
+            [-1, 2]
+        ])
+
+        result = A.cosh()
+
+        self.assertAlmostEqual(result[0, 0], 1)
+        self.assertAlmostEqual(result[0, 1], math.cosh(1))
+        self.assertAlmostEqual(result[1, 0], math.cosh(-1))
+        self.assertAlmostEqual(result[1, 1], math.cosh(2))
+
+    def test_tanh(self):
+        A = Matrix([
+            [0, 1],
+            [-1, 2]
+        ])
+
+        result = A.tanh()
+
+        self.assertAlmostEqual(result[0, 0], 0)
+        self.assertAlmostEqual(result[0, 1], math.tanh(1))
+        self.assertAlmostEqual(result[1, 0], math.tanh(-1))
+        self.assertAlmostEqual(result[1, 1], math.tanh(2))
+
+        self.assertAlmostEqual(result[1, 0], -result[0, 1])
+
+    def test_sum(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        self.assertEqual(A.sum(), 10)
+
+    def test_sum_negative(self):
+        A = Matrix([
+            [-1, 2],
+            [-3, 4]
+        ])
+
+        self.assertEqual(A.sum(), 2)
+
+    def test_sum_single(self):
+        A = Matrix([[7]])
+
+        self.assertEqual(A.sum(), 7)
+
+    def test_mean_negative(self):
+        A = Matrix([
+            [-2, 4],
+            [6, -8]
+        ])
+
+        self.assertEqual(A.mean(), 0)
+
+    def test_mean_non_square(self):
+        A = Matrix([
+            [1, 2, 3],
+            [4, 5, 6]
+        ])
+
+        self.assertEqual(A.mean(), 3.5)
+
+    def test_max(self):
+        A = Matrix([
+            [3, 7],
+            [-2, 5]
+        ])
+
+        self.assertEqual(A.max(), 7)
+
+    def test_prod(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        self.assertEqual(A.prod(), 24)
+
+    def test_prod(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        self.assertEqual(A.prod(), 24)
+
+    def test_norm(self):
+        A = Matrix([
+            [3, 4]
+        ])
+
+        self.assertEqual(A.norm(), 5)
+
+    def test_norm_matrix(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        self.assertAlmostEqual(
+            A.norm(),
+            math.sqrt(30)
+        )
+
+    def test_apply_square(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        result = A.apply(lambda x: x ** 2)
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [1, 4],
+                [9, 16]
+            ])
+        )
+
+    def test_apply_square(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        result = A.apply(lambda x: x ** 2)
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [1, 4],
+                [9, 16]
+            ])
+        )
+
+    def test_matrix_multiplication_after_sum(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        B = Matrix([
+            [5, 6],
+            [7, 8]
+        ])
+
+        self.assertEqual(
+            A * B,
+            Matrix([
+                [19, 22],
+                [43, 50]
             ])
         )
 
