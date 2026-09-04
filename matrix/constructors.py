@@ -1,5 +1,5 @@
 import random
-
+_rng = random.Random()
 
 def one(matrix_class, rows, cols=None):
     if cols is None:
@@ -90,3 +90,26 @@ def from_string(
     ]
 
     return matrix_class(matrix_data)
+
+
+def random_uniform(cls, rows, cols=None, low=-1.0, high=1.0):
+    if cols is None:
+        cols = rows
+
+    if rows <= 0 or cols <= 0:
+        raise ValueError("matrix dimensions must be positive")
+
+    if low >= high:
+        raise ValueError("low must be less than high")
+
+    return cls([
+        [
+            _rng.uniform(low, high)
+            for _ in range(cols)
+        ]
+        for _ in range(rows)
+    ])
+
+def seed(value=None):
+    _rng.seed(value)
+

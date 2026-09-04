@@ -74,3 +74,34 @@ def get_col(matrix, col_index):
         return [matrix.m[i][col_index] for i in range(rows)]
     else:
         raise ValueError()
+    
+def flatten(matrix):
+    result = [
+        value
+        for row in matrix.m
+        for value in row
+    ]
+
+    return type(matrix)([result])
+
+def reshape(matrix, rows, cols):
+    if rows <= 0 or cols <= 0:
+        raise ValueError("matrix dimensions must be positive")
+
+    if rows * cols != matrix.order[0] * matrix.order[1]:
+        raise ValueError(
+            "cannot reshape matrix: element count must remain unchanged"
+        )
+
+    values = [
+        value
+        for row in matrix.m
+        for value in row
+    ]
+
+    result = [
+        values[i * cols:(i + 1) * cols]
+        for i in range(rows)
+    ]
+
+    return type(matrix)(result)

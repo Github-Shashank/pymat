@@ -663,6 +663,181 @@ class TestMatrix(unittest.TestCase):
             ])
         )
 
+    def test_random_uniform_square(self):
+        A = Matrix.random_uniform(3)
+
+        self.assertEqual(A.order, (3, 3))
+
+        for i in range(3):
+            for j in range(3):
+                self.assertGreaterEqual(A[i, j], -1.0)
+                self.assertLess(A[i, j], 1.0)
+
+    def test_random_uniform_rectangular(self):
+        A = Matrix.random_uniform(2, 4)
+
+        self.assertEqual(A.order, (2, 4))
+
+        for i in range(2):
+            for j in range(4):
+                self.assertGreaterEqual(A[i, j], -1.0)
+                self.assertLess(A[i, j], 1.0)
+
+    def test_random_uniform_range(self):
+        A = Matrix.random_uniform(
+            3,
+            2,
+            10,
+            20
+        )
+
+        for i in range(3):
+            for j in range(2):
+                self.assertGreaterEqual(A[i, j], 10)
+                self.assertLess(A[i, j], 20)
+
+    def test_random_uniform_invalid_dimensions(self):
+        with self.assertRaises(ValueError):
+            Matrix.random_uniform(0, 2)
+
+        with self.assertRaises(ValueError):
+            Matrix.random_uniform(-1, 2)
+
+    def test_random_uniform_invalid_range(self):
+        with self.assertRaises(ValueError):
+            Matrix.random_uniform(2, 2, 5, 5)
+
+        with self.assertRaises(ValueError):
+            Matrix.random_uniform(2, 2, 10, 5)
+
+    def test_random_uniform_seed(self):
+        Matrix.seed(42)
+
+        A = Matrix.random_uniform(2, 3)
+
+        Matrix.seed(42)
+
+        B = Matrix.random_uniform(2, 3)
+
+        self.assertEqual(A, B)
+
+    def test_random_uniform_different_seed(self):
+        Matrix.seed(42)
+        A = Matrix.random_uniform(2, 2)
+
+        Matrix.seed(100)
+        B = Matrix.random_uniform(2, 2)
+
+        self.assertNotEqual(A, B)
+
+    def test_shape(self):
+        A = Matrix([
+            [1, 2, 3],
+            [4, 5, 6]
+        ])
+
+        self.assertEqual(A.shape, (2, 3))
+        self.assertEqual(A.shape, A.order)
+
+    def test_flatten(self):
+        A = Matrix([
+            [1, 2, 3],
+            [4, 5, 6]
+        ])
+
+        result = A.flatten()
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [1, 2, 3, 4, 5, 6]
+            ])
+        )
+
+    def test_flatten_order(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4],
+            [5, 6]
+        ])
+
+        result = A.flatten()
+
+        self.assertEqual(result.order, (1, 6))
+
+    def test_flatten_does_not_modify_original(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        A.flatten()
+
+        self.assertEqual(
+            A,
+            Matrix([
+                [1, 2],
+                [3, 4]
+            ])
+        )
+
+    def test_reshape(self):
+        A = Matrix([
+            [1, 2, 3],
+            [4, 5, 6]
+        ])
+
+        result = A.reshape(3, 2)
+
+        self.assertEqual(
+            result,
+            Matrix([
+                [1, 2],
+                [3, 4],
+                [5, 6]
+            ])
+        )
+
+    def test_reshape_invalid_size(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        with self.assertRaises(ValueError):
+            A.reshape(3, 3)
+
+    def test_reshape_invalid_dimensions(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        with self.assertRaises(ValueError):
+            A.reshape(0, 4)
+
+        with self.assertRaises(ValueError):
+            A.reshape(4, 0)
+
+        with self.assertRaises(ValueError):
+            A.reshape(-1, 4)
+
+    def test_reshape_does_not_modify_original(self):
+        A = Matrix([
+            [1, 2],
+            [3, 4]
+        ])
+
+        A.reshape(4, 1)
+
+        self.assertEqual(
+            A,
+            Matrix([
+                [1, 2],
+                [3, 4]
+            ])
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

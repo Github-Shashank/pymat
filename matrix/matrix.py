@@ -23,7 +23,9 @@ from .constructors import (
     diagonal,
     random_matrix,
     elementwise,
-    from_string
+    from_string,
+    random_uniform,
+    seed
 )
 from .bool import (
     is_square,
@@ -45,7 +47,9 @@ from .manipulation import (
     delete_row,
     delete_col,
     get_row,
-    get_col
+    get_col,
+    flatten,
+    reshape
 )
 from .arithmetic import (
     add,
@@ -197,6 +201,10 @@ class Matrix:
         return (len(self.m),len(self.m[0])) 
 
     @property
+    def shape(self):
+        return self.order
+
+    @property
     def transpose(self):
         return transpose(self)
 
@@ -222,6 +230,12 @@ class Matrix:
 
     def getCol(self, colIndex):
         return get_col(self, colIndex)
+
+    def flatten(self):
+        return flatten(self)
+
+    def reshape(self, rows, cols):
+        return reshape(self, rows, cols)
     
     @property
     def isSqrMatrix(self):
@@ -341,3 +355,15 @@ class Matrix:
     @classmethod
     def from_string(cls, my_string, dtype=float,row_sep='\n'):
         return from_string(cls, my_string, dtype,row_sep)
+
+    @classmethod
+    def random_uniform(cls, rows, cols=None, low=-1.0, high=1.0):
+        return random_uniform(cls, rows, cols, low, high)
+
+    @classmethod
+    def random_uniform(cls, rows, cols=None, low=-1.0, high=1.0):
+        return random_uniform(cls, rows, cols, low, high)
+
+    @classmethod
+    def seed(cls, value=None):
+        seed(value)
